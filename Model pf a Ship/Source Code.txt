@@ -1,0 +1,354 @@
+ #include<stdlib.h>
+#include<stdio.h>
+#include<glut.h>
+#include<string.h>
+void snowfall();
+void anchmsg();
+void drawanchor();
+void water();
+void stars();
+void chimney();
+void myinit();
+void name();
+void windows();
+void comprmnt();
+void characters();
+char text[]="TITANIC";
+char text1[]="Remove the anchor to move the ship";
+float a=0,star=0,s[80];
+int count=0,f,zoom=15;
+int lights_on=0,anch=0;
+float speed=0.1;
+
+void display(void)
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	if(star==1)
+		stars();
+    glBegin(GL_POLYGON);
+	glColor3f(0.3,0.3,0.3);
+	glVertex2f(100.0+a,50.0);
+	glColor3f(0.0,0.0,0.0);
+	glVertex2f(50.0+a,150.0);
+	glVertex2f(350.0+a,150.0);
+	glColor3f(0.3,0.3,0.3);
+	glVertex2f(300.0+a,50.0);
+	glEnd();
+	glColor3f(0.5,0.6,0.7);
+	glBegin(GL_POLYGON);
+	glVertex2f(110.0+a,150.0);
+	glVertex2f(125.0+a,210.0);
+	glVertex2f(300.0+a,210.0);
+	glVertex2f(312.0+a,150.0);
+	glEnd();
+	water();
+	chimney();
+//	name();
+	windows();
+	characters();
+	drawanchor();
+	if(anch==1)
+		anchmsg();
+	glutSwapBuffers();
+	glFlush();
+}
+void water(void)
+{
+	glColor3f(0.0,0.5,1.0);
+	glBegin(GL_POLYGON);
+	glVertex2f(-200.0,-200.0);
+	glVertex2f(-200.0,50.0);
+	glVertex2f(1000.0,50.0);
+	glVertex2f(1000.0,-200.0);
+	glEnd();
+}
+void characters()
+{
+	int i;
+	glColor3f(1.0,1.0,1.0);
+	glRasterPos2f(75.0+a,125.0);
+	size_t m=strlen(text);
+	for(i=0;i<m;i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,text[i]);
+		//glFlush();
+	}
+}
+
+
+
+void chimney()
+{
+	int i;
+	for(i=0;i<110;i=i+40)
+	{
+	glColor3f(0.5,0.5,0.5);
+	glBegin(GL_POLYGON);
+	glVertex2f(150.0+i+a,210.0);
+	glVertex2f(150.0+i+a,260.0);
+	glVertex2f(170.0+i+a,260.0);
+	glVertex2f(170.0+i+a,210.0);
+	glEnd();
+	}
+	glLineWidth(5.0);
+	glColor3f(0.0,0.0,0.0);
+	glBegin(GL_LINES);
+	glVertex2f(75.0+a,150.0);
+	glVertex2f(75.0+a,185.0);
+	glEnd();
+	if(count%2==0 || anch==1)
+		f=0;
+	else
+		f=2.5;
+	count++;	
+    glBegin(GL_POLYGON);
+	glColor3f(0.5,0.5,0.5);
+	glVertex2f(75.0+a,170.0);
+	glVertex2f(65.0+a+f,177.0);
+	glColor3f(1.0,1.0,1.0);
+	glVertex2f(75.0+a,185.0);
+	glEnd();
+    
+		
+}
+
+
+void name()
+{
+	glLineWidth(5.0);
+	glColor3f(0.0,0.0,0.8);
+	glBegin(GL_LINES);
+	glVertex2f(0.0,50.0);
+	glVertex2f(400.0,50.0);
+    glEnd();
+	
+}
+
+void windows()
+{
+	int i,j;
+	GLfloat x,x1,y,y1;
+	GLfloat z,z1;
+	if(lights_on==1)
+		x=0.7,y=0.7,z=0.0,x1=0.5,y1=0.5,z1=0.0;
+	else
+		x=y=z=0.0,x1=y1=z1=0.7;
+	
+	for(j=0;j<41;j=j+10)
+	{
+		for(i=0;i<161;i=i+15)
+		{   
+			
+			glColor3f(x,y,z);
+			glBegin(GL_POLYGON);
+			glVertex2f(130.0+i+a,155.0+j);
+			glVertex2f(130.0+i+a,160.0+j);
+		
+			glColor3f(x1,y1,z1);
+			glVertex2f(140.0+i+a,160.0+j);
+			glVertex2f(140.0+i+a,155.0+j);
+			glEnd();
+		}
+	}
+	
+}
+
+void anchmsg()
+{
+int i,m;
+	glColor3f(1.0,1.0,1.0);
+	glRasterPos2f(125.0+a,75.0);
+	 m=strlen(text1);
+	for(i=0;i<m;i++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,text1[i]);
+		
+	}
+}
+
+void drawanchor()
+{
+	glColor3f(0.7,0.7,0.7);
+	if(anch==0)
+	{
+	glBegin(GL_LINES);
+	glVertex2f(65.0+a,149.8);
+	glVertex2f(65.0+a,138.0);
+	glEnd();
+	glBegin(GL_POLYGON);
+	glVertex2f(60.0+a,140.0);
+	glVertex2f(70.0+a,140.0);
+	glVertex2f(70.0+a,135.0);
+	glVertex2f(60.0+a,135.0);
+	glEnd();
+	}
+	else
+	{
+		glBegin(GL_LINES);
+		glVertex2f(65.0+a,150.0);
+		glVertex2f(65.0+a,50.0);
+		glEnd();
+	}
+
+
+}
+
+
+
+
+void menu(int id)
+{
+	switch(id)
+	{
+	case 1:
+		glClearColor(1.0,0.6,0.0,1.0);
+		star=lights_on=0;
+		glutPostRedisplay();
+		break;
+	case 2:glClearColor(0.0,0.6,.8,0.0);
+		star=lights_on=0;
+		glutPostRedisplay();
+		break;
+	case 3:glClearColor(0.1,0.1,0.1,0.0);
+		lights_on=1;
+	    star=1;
+		glutPostRedisplay();
+		break;
+    case 4:glClearColor(1.0,1,1.0,1.0);
+		zoom=0;
+		myinit();
+		star=lights_on=0,a=0;
+		glutPostRedisplay();
+		break;
+	case 5:speed=0.5;
+			break;
+	case 6:speed=1.0;
+			break;
+	case 7:speed=2.0;
+			break;
+	case 9:anch=1;glutPostRedisplay();break;
+	case 10:anch=0;glutPostRedisplay();break;
+	case 8:exit(0);
+	case 11:zoom-=10;myinit();glutPostRedisplay();break;
+	case 12:zoom+=10;myinit();glutPostRedisplay();break;
+
+	}
+}
+
+
+void keyboard(unsigned char key,int x,int y)
+{
+	if(anch==1)
+	{
+		glutPostRedisplay();
+	}
+	else
+	{
+	if(key=='d')
+	{
+		a=a+speed;
+		glutPostRedisplay();
+	}
+	else
+		if(key=='a')
+		{
+			a=a-speed;
+		glutPostRedisplay();
+	}
+
+	}
+
+}
+
+void starvertex()
+{
+	int x,y,i;
+	for(i=0;i<80;i=i+2)
+	{
+		x=rand()%400;y=rand()%400;
+      s[i]=x;s[i+1]=y;
+	}
+}
+
+void stars()
+{
+	int i;
+	glPointSize(3.0);
+	glBegin(GL_POINTS);
+	for(i=0;i<80;i=i+2)
+	{
+		glVertex2f(s[i],s[i+1]);
+
+	}
+	glEnd();
+	
+}
+
+
+void arrowkey(int key,int x,int y)
+{
+	 if(anch==1)
+	{
+		glutPostRedisplay();
+	}
+	 else
+	 {
+	if(key==GLUT_KEY_LEFT)
+		a=a-speed;
+	glutPostRedisplay();
+	if(key==GLUT_KEY_RIGHT)
+		a=a+speed;
+	glutPostRedisplay();
+	 }
+}
+
+
+void myinit()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0.0-zoom,400.0+zoom,0.0-zoom,400.0+zoom);
+    glMatrixMode(GL_MODELVIEW);
+	
+}
+
+
+void main(int argc,char** argv)
+{
+	glutInit(&argc,argv);
+	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
+	glutInitWindowSize(1024.0,1024.0);
+	glutCreateWindow(" ");
+	glutDisplayFunc(display);
+	glClearColor(1.0,1.0,1.0,1.0);
+	myinit();
+	starvertex();
+int submenu=glutCreateMenu(menu);
+	glutAddMenuEntry("dawn",1);
+	glutAddMenuEntry("blue sky",2);
+	glutAddMenuEntry("night",3);
+    glutAddMenuEntry("reset",4);
+	
+int speedmenu=glutCreateMenu(menu);
+	glutAddMenuEntry("1x",5);
+	glutAddMenuEntry("2x",6);
+	glutAddMenuEntry("4x",7);
+int anchormenu=glutCreateMenu(menu);
+	glutAddMenuEntry("anchor on",9);
+	glutAddMenuEntry("anchor off",10);
+	int zoommenu=glutCreateMenu(menu);
+	glutAddMenuEntry("zoom in",11);
+	glutAddMenuEntry("zoom out",12);
+	glutCreateMenu(menu);
+	glutAddSubMenu("zoom",zoommenu);
+	glutAddSubMenu("speed",speedmenu);
+	glutSpecialFunc(arrowkey);
+	glutAddSubMenu("anchor",anchormenu);
+	glutAddSubMenu("settings",submenu);
+	glutAddMenuEntry("exit",8);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+	glutKeyboardFunc(keyboard);
+    glutMainLoop();
+}
+
+
